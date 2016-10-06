@@ -35,7 +35,7 @@ Below is a plot of the reference trajectory versus that of `aObject[32]`. It is 
  
 ![reference_object_trajectory.png'](reference_object_trajectory.png)
   
-The distributions of the trajectory differences and absolute differences between `aObject[32]` and the reference are both bimodal. The figure below was created by computing these difference fields and counting occurrences in 10 cm bins.
+The distributions of the trajectory differences and absolute differences between `aObject[32]` and the reference are both bimodal, indicating trajectory errors are dependent on at least one independent variable. The figure below was created by computing these difference fields and counting occurrences in 10 cm bins. Due to the bimodality, the mean and standard deviations reported in the plot should be ignored since they characterize the whole; rather a mean and standard deviation should be computed for each separate distribution.
 
 ![range_errors.png](./range_error.png)
 
@@ -48,6 +48,10 @@ The convention for this data set has the typical Cartesian (x, y) coordinates ro
 
 ![theta](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Ctan%28%5Ctheta%29%20%3D%20%5Cfrac%7B%5CDelta%20x%7D%7B%5CDelta%20y%7D%20%7E%7E%2C%7E%7E%20V_r%20%3D%20V_x%20%5Csin%28%5Ctheta%29%20&plus;%20V_y%5Ccos%28%5Ctheta%29)
 
-Below is a plot of the reference velocity versus that of `aObject[32]`.
+Below is a plot of the reference velocity versus that of `aObject[32]`. It is interesting to note the relative noisiness in the GPS velocity data, e.g., compared to the GPS range data. I'm interested in learning more about this and the reasons behind it.
 
 ![reference_object_velocity.png](./reference_object_velocity.png)
+
+The distributions of the velocity differences and absolute differences between `aObject[32]` and the reference are shown in the figure below. The velocity difference distribution is Gaussian with a mean of -0.05 kph and standard deviation of 1.80 kph. Assuming a 1/100th kph is approaching sensor precision, there appears to be no significant systematic bias in radar object velocity.
+
+![velocity_error.png](./velocity_error.png)
