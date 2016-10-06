@@ -2,6 +2,19 @@
 proc_sample
 ===========
 
+Program to read radar data sample in CSV format and characterize positional and velocity errors of
+radar objects relative to reference object.
+
+.. autosummary::
+    :toctree: generated/
+
+    read_csv
+    proc_radar
+    _add_object_range
+    _add_object_radial_velocity
+    _parse_radar_objects
+    _longest_tracked_object
+
 """
 
 import csv
@@ -13,7 +26,12 @@ from collections import defaultdict
 object_field = "aObject"
 xdisp_field = ".Kinematic.fDistX"
 ydisp_field = ".Kinematic.fDistY"
+xvel_field = ".Kinematic.fVrelX"
+yvel_field = ".Kinematic.fVrelY"
 cycle_field = ".General.uiLifeCycles"
+
+range_field = ".Kinematic.fRange"  # object range field name
+vel_field = ".Kinematic.fVrel"  # object radial velocity field name
 
 def read_csv(filename, verbose=True):
     """
@@ -29,11 +47,14 @@ def read_csv(filename, verbose=True):
 
     radar = defaultdict(list)
     with open(filename, mode="rb") as csvfile:
-        reader = csv.DictReader(csvfile, fieldnames=None, quoting=csv.QUOTE_NONE,
-                                restkey=None, restval=None, dialect="excel")
+        reader = csv.DictReader(csvfile, fieldnames=None, quoting=csv.QUOTE_NONE, dialect="excel")
         for row in reader:
             for header, value in row.iteritems():
                 radar[header].append(ast.literal_eval(value))
+
+    # convert lists to arrays
+    for header, values in radar.iteritems():
+        radar[header] = np.asarray(values)
 
     if verbose:
         print("Number of headers: {}".format(len(radar)))
@@ -42,16 +63,53 @@ def read_csv(filename, verbose=True):
         _longest_tracked_object(radar)
 
     _add_object_range(radar)
+    _add_object_radial_velocity(radar)
 
     return radar
 
 
-def _add_object_range(radar, range_field=".Kinematic.fRange"):
+def proc_radar(radar, verbose=True):
+    """
+    Process all radar objects and determine object which closely matches reference given trajectory and velocity data.
+
+    :param radar: dict
+        Dictionary containing all original headers and values in CSV.
+    :param verbose: bool, optional
+        True to print useful information, False to suppress.
+    """
+
+    # process trajectory data
+    for obj in _parse_radar_objects(radar):
+        continue
+
+    # process velocity data
+    for obj in _parse_radar_objects(radar):
+        continue
+
+    return
+
+
+def _add_object_range(radar):
     """ Add range from host vehicle for each radar object given (x, y) displacements. """
 
     for obj in _parse_radar_objects(radar):
-        _range = np.sqrt(np.power(radar[obj + xdisp_field], 2.0) + np.power(radar[obj + ydisp_field], 2.0))
-        radar[obj + range_field] = _range
+        _range = np.sqrt(radar[obj + xdisp_field]**2.0 + radar[obj + ydisp_field]**2.0)
+        radar[obj + range_field] = _range  # units of meters
+
+    return
+
+
+def _add_object_radial_velocity(radar):
+    """
+    Add host vehicle line-of-sight (radial) velocity for each radar object given (x, y) component velocities. Objects
+    moving towards the host vehicle should have negative velocity. According to Steven Gerd, positive x is north and
+    positive y is west.
+    """
+
+    for obj in _parse_radar_objects(radar):
+        theta = np.arctan2(radar[obj + xdisp_field], radar[obj + ydisp_field])
+        vrel = radar[obj + yvel_field] * np.cos(theta) + radar[obj + xvel_field] * np.sin(theta)  # units are mps
+        radar[obj + vel_field] = 3600.0 * vrel / 1000.0  # convert mps to kph
 
     return
 
@@ -83,9 +141,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     radar = read_csv(args.file, verbose=args.verbose)
-
-
-
-
-
-
+    proc_radar(radar, verbose=args.verbose)

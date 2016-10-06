@@ -18,7 +18,7 @@ The `file` parameter should be the file name including path of the CSV file. Arg
 The only dependency of `proc_sample` is [NumPy](http://www.numpy.org/).
  
 ### Results
-It turns out that the longest tracked radar object `aObject[32]` best matches to the reference. Here's the output of running `proc_sample` on the sample file provided in verbose mode:
+It turns out that the longest tracked radar object `aObject[32]` best matches the reference. Here's the output of running `proc_sample` on the sample file provided in verbose mode:
 
 ```bash
 > python proc_sample.py Scenario_crossing_left_to_right_50mph.csv -v
@@ -29,9 +29,9 @@ It turns out that the longest tracked radar object `aObject[32]` best matches to
 ```
 
 #### Positional errors
-The context of this discussion assumes that both the GPS used to track the reference and the radar object identification have sub-meter, even sub-centimeter location precision. For someone like myself coming from a meteorological remote sensing background this sounds more like a fantasy, but I digress.
+The context of this discussion assumes that both the GPS used to track the reference and the radar object identification have sub-meter, even sub-centimeter location precision. For someone like myself coming from a meteorological remote sensing background this sounds more like a fantasy, so I'm interested in learning more about this.
 
-Here is the plot of the reference trajectory versus that of `aObject[32]`. It is clear not all trajectory data of `aObject[32]` is valid, and these time steps are ignored in my analysis.
+Below is a plot of the reference trajectory versus that of `aObject[32]`. It is clear not all trajectory data of `aObject[32]` is valid, and these time steps are ignored in my analysis.
  
 ![reference_object_trajectory.png'](reference_object_trajectory.png)
   
@@ -44,4 +44,10 @@ I originally speculated the bimodality was the result of beam broadening offsett
 ![velocity_range_bias.png](./velocity_range_bias.png)
 
 #### Velocity errors
+The convention for this data set has the typical Cartesian (x, y) coordinates rotated 90 deg counterclockwise, so positive x is northward and positive y is westward. Objects moving towards the host vehicle should exhibit negative velocity, and objects moving away from the vehicle should exhibit positive velocity. With this in mind, I computed each radar object's radial velocity using the following two equations.
 
+![theta](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Ctan%28%5Ctheta%29%20%3D%20%5Cfrac%7B%5CDelta%20x%7D%7B%5CDelta%20y%7D%20%7E%7E%2C%7E%7E%20V_r%20%3D%20V_x%20%5Csin%28%5Ctheta%29%20&plus;%20V_y%5Ccos%28%5Ctheta%29)
+
+Below is a plot of the reference velocity versus that of `aObject[32]`.
+
+![reference_object_velocity.png](./reference_object_velocity.png)
