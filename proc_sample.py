@@ -47,7 +47,7 @@ def read_csv(filename, verbose=True):
     """
 
     radar = defaultdict(list)
-    with open(filename, mode="rb") as csvfile:
+    with open(filename, mode="r") as csvfile:
         reader = csv.DictReader(csvfile, fieldnames=None, quoting=csv.QUOTE_NONE, dialect="excel")
         for row in reader:
             for header, value in row.iteritems():
