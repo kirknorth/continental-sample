@@ -42,7 +42,7 @@ Below is a plot of the reference trajectory versus that of `aObject[32]`. It is 
 The distributions of the trajectory differences and absolute differences between `aObject[32]` and the reference are both bimodal, indicating trajectory errors are dependent on at least one independent variable. The figure below was created by computing these difference fields and counting occurrences in 10 cm bins. Due to the bimodality, the mean and standard deviations reported in the plot should be ignored since they characterize the whole; rather a mean and standard deviation should be computed for each separate distribution.
 
 <p align="center">
-    <img src="range_error.png" alt="range_error" width="700px" height="250px">
+    <img src="range_error.png" alt="range_error" width="700px" height="319px">
 </p>
 
 I originally speculated the bimodality was the result of beam broadening offsetting the position, e.g., smaller resolution volume closer to host vehicle (peak around 0 cm), larger resolution volume further from host vehicle (peak around 60 cm). However, upon further inspection, it appears the bimodality is due to directional miscalibration, where the position of objects approaching the host vehicle are systematically overestimated, on average by approx. 60 cm. This can be seen in the two-dimensional density plot between range differences and reference velocity. Range data is binned every 10 cm and velocity data is binned every 0.5 kph. The two distributions are clearly separated in this plot, one distribution for objects moving towards the host vehicle and one distribution for objects moving away from the host vehicle.
@@ -67,5 +67,5 @@ Below is a plot of the reference velocity versus that of `aObject[32]`. It is in
 The distributions of the velocity differences and absolute differences between `aObject[32]` and the reference are shown in the figure below. The velocity difference distribution is Gaussian with a mean of -0.05 kph and standard deviation of 1.80 kph. Assuming a 1/100th kph is approaching sensor precision, there appears to be no significant systematic bias in radar object velocity.
 
 <p align="center">
-    <img src="velocity_error.png" alt="" width="549px" height="250px">
+    <img src="velocity_error.png" alt="" width="700px" height="319px">
 </p>
