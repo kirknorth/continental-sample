@@ -4,7 +4,7 @@ This repo contains my work in basic I/O and processing of a sample of radar data
 The original sample data contained range, velocity, and angular GPS measurements for 2000+ time steps.
 
 <p align="center">
-    <img src="reference.png" alt="reference" width="900px" height="250px">
+    <img src="reference.png" alt="reference" width="800px" height="236px">
 </p>
 
 ### Usage
@@ -36,7 +36,7 @@ The context of this discussion assumes that both the GPS used to track the refer
 Below is a plot of the reference trajectory versus that of `aObject[32]`. It is clear not all trajectory data of `aObject[32]` is valid, and these time steps are ignored in my analysis.
 
 <p align="center">
-    <img src="reference_object_trajectory.png" alt="reference_object_trajectory" width="400px" height="350px">
+    <img src="reference_object_trajectory.png" alt="reference_object_trajectory" width="500px" height="398px">
 </p>
   
 The distributions of the trajectory differences and absolute differences between `aObject[32]` and the reference are both bimodal, indicating trajectory errors are dependent on at least one independent variable. The figure below was created by computing these difference fields and counting occurrences in 10 cm bins. Due to the bimodality, the mean and standard deviations reported in the plot should be ignored since they characterize the whole; rather a mean and standard deviation should be computed for each separate distribution.
@@ -48,7 +48,7 @@ The distributions of the trajectory differences and absolute differences between
 I originally speculated the bimodality was the result of beam broadening offsetting the position, e.g., smaller resolution volume closer to host vehicle (peak around 0 cm), larger resolution volume further from host vehicle (peak around 60 cm). However, upon further inspection, it appears the bimodality is due to directional miscalibration, where the position of objects approaching the host vehicle are systematically overestimated, on average by approx. 60 cm. This can be seen in the two-dimensional density plot between range differences and reference velocity. Range data is binned every 10 cm and velocity data is binned every 0.5 kph. The two distributions are clearly separated in this plot, one distribution for objects moving towards the host vehicle and one distribution for objects moving away from the host vehicle.
 
 <p align="center">
-    <img src="velocity_range_bias.png" alt="velocity_range_bias" width="400px" height="350px">
+    <img src="velocity_range_bias.png" alt="velocity_range_bias" width="500px" height="398px">
 </p>
 
 #### Velocity errors
@@ -61,7 +61,7 @@ The convention for this data set has the typical Cartesian (x, y) coordinates ro
 Below is a plot of the reference velocity versus that of `aObject[32]`. It is interesting to note the relative noisiness in the GPS velocity data, e.g., compared to the GPS range data. I'm interested in learning more about this and the reasons behind it.
 
 <p align="center">
-    <img src="reference_object_velocity.png" alt="reference_object_velocity" width="400px" height="350px">
+    <img src="reference_object_velocity.png" alt="reference_object_velocity" width="500px" height="398px">
 </p>
 
 The distributions of the velocity differences and absolute differences between `aObject[32]` and the reference are shown in the figure below. The velocity difference distribution is Gaussian with a mean of -0.05 kph and standard deviation of 1.80 kph. Assuming a 1/100th kph is approaching sensor precision, there appears to be no significant systematic bias in radar object velocity.
