@@ -1,3 +1,5 @@
+[![build status](https://travis-ci.org/kirknorth/continental-sample.svg?branch=master)](https://travis-ci.org/kirknorth/continental-sample)
+
 ### Description
 This repo contains my work in basic I/O and processing of a sample of radar data. The first goal was to write a reader capable of handling the provided CSV file as well as any other file of similar nature but representing a different scenario. The second goal was to find the radar object in the sample data which most closely matched the reference and characterize its positional and velocity errors.
 
