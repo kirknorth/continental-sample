@@ -50,7 +50,7 @@ def read_csv(filename, verbose=True):
     with open(filename, mode="r") as csvfile:
         reader = csv.DictReader(csvfile, fieldnames=None, quoting=csv.QUOTE_NONE, dialect="excel")
         for row in reader:
-            for header, value in row.iteritems():
+            for header, value in row.items():
                 radar[header].append(ast.literal_eval(value))
 
     # convert lists to arrays
