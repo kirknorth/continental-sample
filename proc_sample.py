@@ -54,7 +54,7 @@ def read_csv(filename, verbose=True):
                 radar[header].append(ast.literal_eval(value))
 
     # convert lists to arrays
-    for header, values in radar.iteritems():
+    for header, values in radar.items():
         radar[header] = np.asarray(values)
 
     if verbose:
