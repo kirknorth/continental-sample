@@ -47,7 +47,7 @@ The distributions of the trajectory differences and absolute differences between
     <img src="images/range_error.png" alt="range_error" width="700px" height="319px">
 </p>
 
-I originally speculated the bimodality was the result of beam broadening offsetting the position, e.g., smaller resolution volume closer to host vehicle (peak around 0 cm), larger resolution volume further from host vehicle (peak around 60 cm). However, upon further inspection, it appears the bimodality is due to directional miscalibration, where the position of objects approaching the host vehicle are systematically overestimated, on average by approx. 60 cm. This can be seen in the two-dimensional density plot between range differences and reference velocity. Range data is binned every 10 cm and velocity data is binned every 0.5 kph. The two distributions are clearly separated in this plot, one distribution for objects moving towards the host vehicle and one distribution for objects moving away from the host vehicle.
+I originally speculated the bimodality was the result of beam broadening offsetting the position, e.g., smaller resolution volume closer to host vehicle (peak around 0 cm), larger resolution volume further from host vehicle (peak around 60 cm). However, upon further inspection, it appears the bimodality is due to directional miscalibration or offset, where the range of objects approaching the host vehicle are systematically overestimated by the radar, on average by approx. 60 cm. This can be seen in the two-dimensional density plot between range differences and reference velocity. Range data is binned every 10 cm and velocity data is binned every 0.5 kph. The two distributions are clearly separated in this plot, one distribution for objects moving towards the host vehicle and one distribution for objects moving away from the host vehicle.
 
 <p align="center">
     <img src="images/velocity_range_bias.png" alt="velocity_range_bias" width="500px" height="398px">
@@ -66,7 +66,7 @@ Below is a plot of the reference velocity versus that of `aObject[32]`. It is in
     <img src="images/reference_object_velocity.png" alt="reference_object_velocity" width="500px" height="398px">
 </p>
 
-The distributions of the velocity differences and absolute differences between `aObject[32]` and the reference are shown in the figure below. The velocity difference distribution is Gaussian with a mean of -0.05 kph and standard deviation of 1.80 kph. Assuming a 1/100th kph is approaching sensor precision, there appears to be no significant systematic bias in radar object velocity.
+The distributions of the velocity differences and absolute differences between `aObject[32]` and the reference are shown in the figure below. The velocity difference distribution is Gaussian with a mean of -0.05 kph and standard deviation of 1.80 kph. Assuming a 1/100th kph is approaching sensor precision, there appears to be no significant systematic bias in radar object velocity. The mean absolute velocity difference between `aObject[32]` and the reference is 1.32 kph (mean of distribution in second panel below), which gives us a *best case scenario* for the radar velocity error since it weights all differences the same. Instead, a more useful metric is the root-mean-squared difference since larger differences have more impact, thus providing a *worst case scenario* for the radar velocity error. For `aObject[32]`, the root-mean-squared velocity difference is 1.80 kph.  
 
 <p align="center">
     <img src="images/velocity_error.png" alt="" width="700px" height="319px">
