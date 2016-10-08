@@ -1,4 +1,4 @@
-[![build status](https://travis-ci.org/kirknorth/continental-sample.svg?branch=master)](https://travis-ci.org/kirknorth/continental-sample)
+[![Travis](https://travis-ci.org/kirknorth/continental-sample.svg?branch=master)](https://travis-ci.org/kirknorth/continental-sample) [![Coveralls](https://coveralls.io/repos/github/kirknorth/continental-sample/badge.svg?branch=master)](https://coveralls.io/github/kirknorth/continental-sample?branch=master)
 
 Description
 -----------
