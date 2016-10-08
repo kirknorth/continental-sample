@@ -6,6 +6,12 @@ python:
   - "3.4"
   - "3.5"
 
-install: "pip install nose"
+install:
+  - pip install nose
+  - pip install coveralls
 
-script: nosetests
+script:
+  - nosetests
+
+after_succes:
+  - coveralls
