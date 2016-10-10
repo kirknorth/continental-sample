@@ -30,6 +30,7 @@ xdisp_field = ".Kinematic.fDistX"
 ydisp_field = ".Kinematic.fDistY"
 xvel_field = ".Kinematic.fVrelX"
 yvel_field = ".Kinematic.fVrelY"
+dynamic_field = ".Attributes.eDynamicProperty"
 cycle_field = ".General.uiLifeCycles"
 
 range_field = ".Kinematic.fRange"  # object range field name
@@ -86,6 +87,31 @@ def proc_radar(radar, use_longest_tracked=True, verbose=True):
         obj = _longest_tracked_object(radar, verbose=verbose)
     else:
         raise ValueError("Currently only the longest tracked radar object should be processed.")
+
+    # process radar object quality fields
+    obj_dynamic = radar[obj + dynamic_field]  # appears to be good indicator but need to discuss with Steven how this field is derived
+    obj_cycle = radar[obj + cycle_field]  # life cycles -> object tracking counter
+    is_poor_quality = (obj_dynamic != 0) | (np.gradient(obj_cycle) != 1.0)
+    if all(is_poor_quality):
+        raise ValueError("All time steps considered poor quality.")
+
+    # process trajectory data
+    ref_range = radar["CAN Global.Range_tg1"]  # meters
+    obj_range = radar[obj + range_field]  # meters
+    range_diff = 100.0 * np.ma.masked_where(is_poor_quality, obj_range - ref_range)  # centimeters
+
+    if verbose:
+        print("Mean range diff ............. : {:.2f} cm".format(range_diff.mean()))
+        print("Standard deviation range diff : {:.2f} cm".format(range_diff.std()))
+
+    # process velocity data
+    ref_vel = radar["CAN Global.RelSpd_tg1"]  # kph
+    obj_vel = radar[obj + vel_field]  # kph
+    vel_diff = np.ma.masked_where(is_poor_quality, obj_vel - ref_vel)  # kph
+
+    if verbose:
+        print("Mean velocity diff ............. : {:.2f} kph".format(vel_diff.mean()))
+        print("Standard deviation velocity diff : {:.2f} kph".format((vel_diff.std())))
 
     # plot trajectory and velocity data
     _plot_object_trajectory_and_velocity(radar, obj)
@@ -161,7 +187,6 @@ def _plot_object_trajectory_and_velocity(radar, obj):
     axb.set_ylabel("velocity (kph)")
     axb.set_xlabel("CycleCount")
     axb.grid(which="major")
-
     axb.legend(loc=[0.15, -0.25], ncol=2, fancybox=True, shadow=False)
 
     plt.show()
