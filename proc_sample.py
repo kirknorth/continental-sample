@@ -21,6 +21,7 @@ import csv
 import ast
 import argparse
 import numpy as np
+import matplotlib.pyplot as plt
 from collections import defaultdict
 
 object_field = "aObject"
@@ -61,7 +62,6 @@ def read_csv(filename, verbose=True):
         print("Number of headers: {}".format(len(radar)))
         print("Number of radar objects: {}".format(len(_parse_radar_objects(radar))))
         print("Number of time steps: {}".format(len(radar[header])))
-        _longest_tracked_object(radar)
 
     _add_object_range(radar)
     _add_object_radial_velocity(radar)
@@ -69,23 +69,25 @@ def read_csv(filename, verbose=True):
     return radar
 
 
-def proc_radar(radar, verbose=True):
+def proc_radar(radar, use_longest_tracked=True, verbose=True):
     """
-    Process all radar objects and determine object which closely matches reference given trajectory and velocity data.
+    Process radar and determine object which closely matches reference given trajectory and velocity data.
 
     :param radar: dict
         Dictionary containing all original headers and values in CSV.
+    :param use_longest_tracked: bool
+        True to process longest tracked radar object. Currently this is the only method available.
     :param verbose: bool, optional
         True to print useful information, False to suppress.
     """
 
-    # process trajectory data
-    for obj in _parse_radar_objects(radar):
-        continue
+    if use_longest_tracked:
+        obj = _longest_tracked_object(radar, verbose=verbose)
+    else:
+        raise ValueError("Currently only the longest tracked radar object should be processed.")
 
-    # process velocity data
-    for obj in _parse_radar_objects(radar):
-        continue
+    # plot trajectory and velocity data
+    _plot_object_trajectory_and_velocity(radar, obj)
 
     return
 
@@ -123,13 +125,45 @@ def _parse_radar_objects(radar):
     return radar_objects
 
 
-def _longest_tracked_object(radar):
+def _longest_tracked_object(radar, verbose=True):
     """ Determine longest tracked radar object given LifeCycles info. """
 
     cycle_max = []
     for obj in _parse_radar_objects(radar):
         cycle_max.append(max(radar[obj + cycle_field]))
-    print("Longest tracked radar object: {}".format(_parse_radar_objects(radar)[np.argmax(cycle_max)]))
+    obj = _parse_radar_objects(radar)[np.argmax(cycle_max)]
+    if verbose:
+        print("Longest tracked radar object: {}".format(obj))
+
+    return obj
+
+
+def _plot_object_trajectory_and_velocity(radar, obj):
+    """ Plot radar object trajectory and velocity, overlaid with reference data. """
+
+    fig, (axa, axb) = plt.subplots(nrows=2, ncols=1, sharex=True, **{"figsize": (6, 10)})
+    fig.subplots_adjust(hspace=0.2)
+
+    # (a) radar object and reference trajectory
+    axa.plot(radar["CycleCount"], radar["CAN Global.Range_tg1"], "k-", lw=2, alpha=0.5, label="ref")
+    axa.plot(radar["CycleCount"], radar[obj + range_field], "b-", lw=1, label=obj)
+    axa.set_ylim(0, 120)
+    axa.set_title("ref vs {} trajectory".format(obj))
+    axa.set_ylabel("range (m)")
+    axa.grid(which="major")
+
+    # (b) radar object and reference velocity
+    axb.plot(radar["CycleCount"], radar["CAN Global.RelSpd_tg1"], "k-", lw=2, alpha=0.5, label="ref")
+    axb.plot(radar["CycleCount"], radar[obj + vel_field], "b-", lw=1, label=obj)
+    axb.set_ylim(-20, 20)
+    axb.set_title("ref vs {} velocity".format(obj))
+    axb.set_ylabel("velocity (kph)")
+    axb.set_xlabel("CycleCount")
+    axb.grid(which="major")
+
+    plt.show()
+    fig.savefig("reference_vs_object.png", format="png", dpi=300, bbox_inches="tight")  # saves figure in cwd
+
     return
 
 
