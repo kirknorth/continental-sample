@@ -26,7 +26,7 @@ The only dependencies of `proc_sample` are [NumPy](http://www.numpy.org/) and [m
  
 Results
 -------
-It turns out that the longest tracked radar object `aObject[32]` best matches the reference. Here's the output of running `proc_sample` on the sample file provided in verbose mode:
+It turns out that the longest tracked radar object `aObject[32]` best matches the reference. Here's the output of running `proc_sample` on the larger sample file provided in verbose mode:
 
 ```bash
 > python proc_sample.py Scenario_crossing_left_to_right_50mph.csv -v
@@ -34,7 +34,17 @@ It turns out that the longest tracked radar object `aObject[32]` best matches th
 > Number of radar objects: 40
 > Number of time steps: 2021
 > Longest tracked radar object: aObject[32]
+> Mean range diff ............. : 16.03 cm
+> Standard deviation range diff : 113.44 cm
+> Mean velocity diff ............. : -2.23 kph
+> Standard deviation velocity diff : 85.00 kph
 ```
+
+From the output it is clear that outliers are likely affecting the difference statistics. At first glance the `General.uiLifeCycles` and `Attributes.eDynamicProperty` fields appear to provide a good measure of information regarding the quality of the radar object and its identification. In particular, the gradient or slope of the life cycles field should be equal to 1 as the counter increases by 1 from time step to time step. Wherever there is a jump in the slope, i.e., the counter is *restarted*, then presumably the object could not be tracked for whatever reason. Below is a plot of these two fields versus time.
+ 
+<p align="center">
+    <img src="images/object_quality.png" alt="object_quality" width="700px" height="266">
+</p>
 
 #### Positional errors
 The context of this discussion assumes that both the GPS used to track the reference and the radar object identification have sub-meter, even sub-centimeter location precision. For someone like myself coming from a meteorological remote sensing background this sounds more like a fantasy, so I'm interested in learning more about this.
