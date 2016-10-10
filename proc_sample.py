@@ -14,6 +14,7 @@ radar objects relative to reference object.
     _add_object_radial_velocity
     _parse_radar_objects
     _longest_tracked_object
+    _plot_object_trajectory_and_velocity
 
 """
 
@@ -160,6 +161,8 @@ def _plot_object_trajectory_and_velocity(radar, obj):
     axb.set_ylabel("velocity (kph)")
     axb.set_xlabel("CycleCount")
     axb.grid(which="major")
+
+    axb.legend(loc=[0.15, -0.25], ncol=2, fancybox=True, shadow=False)
 
     plt.show()
     fig.savefig("reference_vs_object.png", format="png", dpi=300, bbox_inches="tight")  # saves figure in cwd

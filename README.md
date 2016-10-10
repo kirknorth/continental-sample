@@ -22,7 +22,7 @@ The `file` parameter should be the file name including path of the CSV file. Arg
  
 Dependencies
 ------------
-The only dependency of `proc_sample` is [NumPy](http://www.numpy.org/).
+The only dependencies of `proc_sample` are [NumPy](http://www.numpy.org/) and [matplotlib](http://matplotlib.org/).
  
 Results
 -------
